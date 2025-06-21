@@ -45,40 +45,64 @@
 
                 <form method="POST" enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
+                    <div class="mb-3">
+                            {{ form.full_name.label_tag }}
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}
+                                <div class="text-danger">{{ form.full_name.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.username.label_tag }}
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.id_student.label_tag }}
+                            {{ form.id_student }}
+                            {% if form.id_student.errors %}
+                                <div class="text-danger">{{ form.id_student.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.career.label_tag }}
+                            {{ form.career }}
+                            {% if form.career.errors %}
+                                <div class="text-danger">{{ form.career.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.image.label_tag }}
+                            {{ form.image }}
+                            {% if form.image.errors %}
+                                <div class="text-danger">{{ form.image.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.password1.label_tag }}
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger">{{ form.password1.errors }}</div>
+                            {% endif %}
+                    </div>
+                    <div class="mb-3">
+                            {{ form.password2.label_tag }}
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors }}</div>
+                            {% endif %}
+                    </div>
 
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de usuario</label>
-                        <input type="text" name="username" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="full_name" class="form-label">Nombre completo</label>
-                        <input type="text" name="full_name" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_student" class="form-label">Numero de carnet</label>
-                        <input type="text" name="id_student" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" name="email" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="career" class="form-label">Carrera</label>
-                        <input type="text" name="career" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password1" class="form-label">Contraseña</label>
-                         <input type="password" name="password1" class="form-control">
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="password2" class="form-label">Confirmar contraseña</label>
-                        <input type="password" name="password2" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Foto de perfil</label>
-                        <input type="file" name="image" class="form-control">
-                    </div>
 
 
                     <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
