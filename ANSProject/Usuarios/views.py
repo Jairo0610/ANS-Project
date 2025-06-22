@@ -9,7 +9,8 @@ from .models import UserProfile
 from django.contrib import messages
 # Create your views here.
 
-def loginView(request):
+def login_view(request):
+    logout(request)
     if request.method == "POST":
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
@@ -21,14 +22,14 @@ def loginView(request):
         form = AuthenticationForm()
     logout(request)
     return render(request, 'auth/login.html', {'form': form})
-def logoutView(request):
+def logout_view(request):
     logout(request)
     return redirect('login')
 
-def inicioView(request):
+def inicio_view(request):
     return render(request, 'inicio.html')
 
-def signUpView(request):
+def sign_up_view(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST, request.FILES)
 
@@ -54,3 +55,6 @@ def signUpView(request):
     else:
         form = SignUpForm()
     return render(request, 'auth/signup.html', {'form': form})
+
+def edit_profile_view(request):
+    return render(request,'profiles/profile.html')

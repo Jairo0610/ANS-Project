@@ -1,0 +1,121 @@
+{% extends "base/main.html" %}
+{% load static %}
+{% block title %} Inicio {% endblock %}
+
+{% block content %}
+    <!-- seccion principal -->
+<!-- templates/editar_perfil.html -->
+<div class="container my-5">
+
+  <!-- Información personal -->
+  <div class="row bg-dark text-white p-4 rounded mb-4">
+    <div class="col-md-4 border-end">
+      <h4>Información personal</h4>
+      <p class="text-muted">Esta información es privada y no será visible públicamente.</p>
+    </div>
+    <div class="col-md-8">
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <!-- Nombre completo -->
+        <div class="mb-3">
+          <label class="form-label text-uppercase small">Nombre completo</label>
+          <input type="text" class="form-control bg-secondary text-white border-0"
+                 name="full_name" value="{{ profile.full_name }}" placeholder="Tu nombre completo">
+        </div>
+
+        <!-- Correo electrónico -->
+        <div class="mb-3">
+          <label class="form-label text-uppercase small">Correo electrónico</label>
+          <input type="email" class="form-control bg-secondary text-white border-0"
+                 name="email" value="{{ user.email }}" placeholder="Correo electrónico">
+        </div>
+
+        <!-- ID de estudiante -->
+        <div class="mb-3">
+          <label class="form-label text-uppercase small">ID de estudiante</label>
+          <input type="text" class="form-control bg-secondary text-white border-0"
+                 name="id_student" value="{{ profile.id_student }}" placeholder="ID estudiante">
+        </div>
+
+        <!-- Carrera -->
+        <div class="mb-3">
+          <label class="form-label text-uppercase small">Carrera</label>
+          <input type="text" class="form-control bg-secondary text-white border-0"
+                 name="career" value="{{ profile.career }}" placeholder="Ej. Ingeniería">
+        </div>
+
+    </div>
+  </div>
+
+  <!-- Inicio de sesión -->
+  <div class="row bg-dark text-white p-4 rounded mb-4">
+    <div class="col-md-4 border-end">
+      <h4>Inicio de sesión</h4>
+      <p class="text-muted">Recomendamos actualizar tu contraseña periódicamente.</p>
+    </div>
+    <div class="col-md-8">
+
+      <!-- Nombre de usuario -->
+      <div class="mb-3">
+        <label class="form-label text-uppercase small">Nombre de usuario</label>
+        <input type="text" class="form-control bg-secondary text-white border-0"
+               name="username" value="{{ user.username }}">
+      </div>
+
+      <!-- Cambiar contraseña -->
+      <h6 class="mt-4 mb-3">Cambiar contraseña</h6>
+      <div class="mb-3">
+        <input type="password" class="form-control bg-secondary text-white border-0"
+               name="current_password" placeholder="Contraseña actual">
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control bg-secondary text-white border-0"
+               name="new_password" placeholder="Nueva contraseña">
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control bg-secondary text-white border-0"
+               name="confirm_password" placeholder="Confirmar nueva contraseña">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Imagen de perfil -->
+  <div class="row bg-dark text-white p-4 rounded mb-4">
+    <div class="col-md-4 border-end">
+      <h4>Imagen de perfil</h4>
+      <p class="text-muted">Puedes actualizar tu foto de perfil.</p>
+    </div>
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label text-uppercase small d-block">Imagen actual:</label>
+        {% if user.userprofile.image %}
+          <img src="{{ user.userprofile.image.url }}" alt="Imagen de perfil actual"
+               class="img-thumbnail rounded-circle" width="100">
+        {% else %}
+          <p class="text-muted">No tienes imagen de perfil aún.</p>
+        {% endif %}
+
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-uppercase small">Subir nueva imagen</label>
+        <input type="file" class="form-control bg-secondary text-white border-0"
+               name="image" accept="image/*">
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de guardar -->
+  <div class="text-end">
+    <button type="submit" class="btn btn-danger px-4">Guardar cambios</button>
+  </div>
+
+  </form>
+</div>
+
+
+{% endblock %}
+</body>
+</html>
