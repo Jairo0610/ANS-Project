@@ -2,55 +2,39 @@
 {% load static %}
 {% block title %} Inicio {% endblock %}
 
+
 {% block content %}
-    <!-- seccion principal -->
-    <section class="position-relative py-5 py-md-5 py-lg-5">
-        <div class="container position-relative">
-          <div class="position-absolute top-0 start-0 w-100 h-100 bg-home"></div>
-
-          <div class="row justify-content-center">
-            <div class="col-lg-8 text-center text-lg-start">
-              <h1 class="display-4 fw-bold mb-4">
-                Métodos <span class="text-danger">Numéricos</span>
-              </h1>
-              <h1>Lagrange y Diferenciación Numérica</h1>
-              <p class="lead mb-4">
-                Explicación breve
-              </p>
-              <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-
+        <!-- seccion opciones -->
+        <section class="py-4 bg-white">
+            <div class="container">
+              <div class="row g-4">
+                <div class="col">
+                  <div class="text-center p-4 rounded-3 bg-light">
+                    <i class="bi bi-calculator fs-1 text-danger mb-3"></i>
+                    <h3 class="display-6 fw-bold mb-2">Solucionador</h3>
+                    <p class="fs-5 text-muted">Botón</p>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="text-center p-4 rounded-3 bg-light">
+                    <i class="bi bi-file-text fs-1 text-danger mb-3"></i>
+                    <h3 class="display-6 fw-bold">Documentación</h3>
+                    <p class="fs-5 text-muted">Botón</p>
+                  </div>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="col">
+                  <div class="text-center p-4 rounded-3 bg-light">
+                    <i class="bi bi-clock-history fs-1 text-danger mb-3"></i>
+                    <h3 class="display-6 fw-bold mb-2">Historial</h3>
+                    <p class="fs-5 text-muted">Botón</p>
+                  </div>
+                </div>
+                {% endif %}
               </div>
             </div>
-          </div>
-        </div>
-    </section>
-
-    <!-- seccion opciones -->
-    <section class="py-4 bg-white">
-        <div class="container">
-          <div class="row g-4">
-            <div class="col-md-4">
-              <div class="text-center p-4 rounded-3 bg-light">
-                <i class="bi bi-calculator fs-1 text-danger mb-3"></i>
-                <h3 class="display-6 fw-bold mb-2">Solucionador</h3>
-                <p class="fs-5 text-muted">Botón</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center p-4 rounded-3 bg-light">
-                <i class="bi bi-clock-history fs-1 text-danger mb-3"></i>
-                <h3 class="display-6 fw-bold mb-2">Historial</h3>
-                <p class="fs-5 text-muted">Botón</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center p-4 rounded-3 bg-light">
-                <i class="bi bi-file-text fs-1 text-danger mb-3"></i>
-                <h3 class="display-6 fw-bold">Documentación</h3>
-                <p class="fs-5 text-muted">Botón</p>
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>
+        </section>
 {% endblock %}
+
+
+
