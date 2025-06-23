@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm
+from .forms import SignUpForm, EditUserForm, EditUserProfileForm
 from .models import UserProfile
 from django.contrib import messages
 # Create your views here.
@@ -42,13 +42,18 @@ def sign_up_view(request):
             )
 
             # Guardar el perfil adicional
-            UserProfile.objects.create(
-                user=user,
-                full_name=form.cleaned_data['full_name'].title().replace('  ', ' '),
-                image=form.cleaned_data.get('image'),
-                career=form.cleaned_data['career'].title(),
-                id_student=form.cleaned_data['id_student'].upper()
-            )
+            profile_data = {
+                'user': user,
+                'full_name': form.cleaned_data['full_name'].title().replace('  ', ' '),
+                'career': form.cleaned_data['career'].title(),
+                'id_student': form.cleaned_data['id_student'].upper(),
+            }
+
+            # Solo añade 'image' si el usuario subió una
+            if form.cleaned_data.get('image'):
+                profile_data['image'] = form.cleaned_data.get('image')
+
+            UserProfile.objects.create(**profile_data)
 
             return redirect('login')  # Redirigir después del registro
 
@@ -57,4 +62,26 @@ def sign_up_view(request):
     return render(request, 'auth/signup.html', {'form': form})
 
 def edit_profile_view(request):
-    return render(request,'profiles/profile.html')
+    user = request.user
+    profile = user.userprofile
+
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST, instance=user)
+        profile_form = EditUserProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado con éxito.')
+            return redirect('profile')  # O redirige donde desees
+    else:
+        user_form = EditUserForm(instance=user)
+        profile_form = EditUserProfileForm(instance=profile)
+
+    context = {
+        'user': request.user,
+        'profile': request.user.userprofile,
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }
+    return render(request, 'profiles/profile.html', context)
