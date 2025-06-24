@@ -85,3 +85,6 @@ def edit_profile_view(request):
         'profile_form': profile_form,
     }
     return render(request, 'profiles/profile.html', context)
+
+def doc(request):
+    return render(request, 'documentacion.html')

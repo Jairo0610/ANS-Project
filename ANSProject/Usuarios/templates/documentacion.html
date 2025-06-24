@@ -1,0 +1,150 @@
+{% extends "base/main.html" %}
+{% load static %}
+
+{% block title %} Documentación {% endblock %}
+
+
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+{% block content %}
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+
+      <!-- Sección: Polinomio de Lagrange -->
+      <section id="lagrange" class="mb-5">
+        <h2 class="mb-3">Polinomio de Lagrange</h2>
+        <div class="card">
+          <div class="card-body">
+            <!-- Aquí ingresarás el contenido de la documentación sobre Polinomio de Lagrange -->
+            <p>
+                El polinomio de interpolación de Lagrange es simplemente una reformulación del
+                polinomio de Newton que evita el cálculo de las diferencias divididas, y se representa de
+                manera concisa como
+                \[
+                P(x) = \sum_{i=0}^{n-1} L_i(x) f(x_i)
+                \]
+                (18.20)
+            </p>
+            <p>
+                donde
+
+                \[
+                L_i(x) = \prod_{\substack{j=0 \\ j \ne i}}^{n-1} \frac{x - x_j}{x_i - x_j}
+                \]
+                (18.21)
+            </p>
+            <p>
+              donde $\prod$ designa el “producto de”. Por ejemplo, la versión lineal ($n = 1$) es
+                \[
+                f_1(x) = \frac{x - x_1}{x_0 - x_1} f(x_0) + \frac{x - x_0}{x_1 - x_0} f(x_1)
+                \]
+                (18.22)
+            </p>
+            <p>
+                y la versión de segundo grado es
+                \[
+                f_2(x)=\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}f(x_0)+\frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)}f(x_1)+\frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)}f(x_2)
+                \]
+                (18.23)
+            </p>
+            <p>
+                La ecuación (18.20) se obtiene de manera directa del polinomio de Newton (cuadro
+                18.1). Sin embargo, el razonamiento detrás de la formulación de Lagrange se compren
+                de directamente al darse cuenta de que cada término $L_i(x)$ será 1 en $x = x_i$ y 0 en todos
+                los otros puntos (figura 18.10). De esta forma, cada producto $L_i(x)$ $f(x_i)$ toma el valor de
+                $f(x_i)$ en el punto $x_i$. En consecuencia, la sumatoria de todos los productos en la ecuación
+                (18.20) es el único polinomio de n-ésimo grado que pasa exactamente a través de todos
+                los n + 1 puntos, que se tienen como datos.
+            </p>
+            <h3>Ejemplo</h3>
+            <p>
+                Considere los siguientes punto (0,1), (1,3) y (2,0). Encontrar el polinomio de interpolación de Lagrange.
+            </p>
+
+            <h5>Solución:</h5>
+            <table class="table text-center" style="width: 50%;">
+              <thead>
+                <tr>
+                  <th scope="col">$i$</th>
+                  <th scope="col">$x_i$</th>
+                  <th scope="col">$f(x_i)$</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">0</th>
+                  <td>0</td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>1</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>2</td>
+                  <td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h6 class="text-center">Encontrando los $L_i(x)$</h6>
+          <div>
+            \[
+              L_i(x) = \prod_{\substack{j=0 \\ j \ne i}}^{n-1} \frac{x - x_j}{x_i - x_j}
+            \]
+            \[
+              L_0(x)=\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}=\frac{(x-1)(x-2)}{(0-1)(0-2)}=(\frac{1}{2})(x^2-3x+2)
+            \]
+            \[
+              L_1(x)=\frac{(x-x_0)(x-x_2)}{(x_1-x_0)(x_1-x_2)}=\frac{(x-0)(x-2)}{(1-0)(1-2)}=-(x^2-2x)
+            \]
+            \[
+              L_1(x)=\frac{(x-x_0)(x-x_1)}{(x_2-x_0)(x_2-x_1)}=\frac{(x-0)(x-1)}{(2-0)(2-1)}=(\frac{1}{2})(x^2-x)
+            \]
+          </div>
+          <h6 class="text-center">Encontrando el polinomio de interpolación de Lagrange</h6>
+          <div>
+            \[
+              P(x) = \sum_{i=0}^{n-1} L_i(x) f(x_i)
+            \]
+            \[
+              P(x)=L_0(x)f(x_0)+L_1(x)f(x_1)+L_2(x)f(x_2)
+            \]
+            \[
+              P(x)=(1)(\frac{1}{2})(x^2-3x+2)+(3)(-(x^2-2x))+(0)(\frac{1}{2})(x^2-x)
+            \]
+            \[
+              P(x)=-\frac{5}{2}x^2+\frac{9}{2}x+1
+            \]
+          </div>
+          <h5>Por lo tanto el polinomio de interpolación de Lagrange es: $-\frac{5}{2}x^2+\frac{9}{2}x+1$</h5>
+        </div>        
+      </section>
+
+      <!-- Sección: Diferenciación Numérica -->
+      <section id="diferenciacion" class="mb-5">
+        <h2 class="mb-3">Diferenciación Numérica</h2>
+        <div class="card">
+          <div class="card-body">
+            <!-- Aquí ingresarás el contenido de la documentación sobre Diferenciación Numérica -->
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+{% endblock %}

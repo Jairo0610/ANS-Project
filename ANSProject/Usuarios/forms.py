@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from sympy import false
 
 from .models import UserProfile
 
@@ -34,7 +35,7 @@ class SignUpForm(forms.ModelForm):
 
     image = forms.ImageField(
         label='Imagen de perfil',
-        required=True,
+        required=False,
         widget=forms.FileInput(attrs={'class': 'form-control'})
     )
 
@@ -155,9 +156,6 @@ class EditUserForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-
-        if not email.endswith(('.com', '.edu', '.org')):
-            raise forms.ValidationError("El correo debe tener un dominio válido (.com, .edu, .org, etc.)")
 
         if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Este correo electrónico ya está registrado.")
