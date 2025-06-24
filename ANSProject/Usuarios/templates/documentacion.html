@@ -14,9 +14,9 @@
 
       <!-- Sección: Polinomio de Lagrange -->
       <section id="lagrange" class="mb-5">
-        <h2 class="mb-3">Polinomio de Lagrange</h2>
+        <h2 class="mb-3">Polinomio de Interpolación de Lagrange</h2>
         <div class="card">
-          <div class="card-body">
+          <div class="card-body text-justify">
             <!-- Aquí ingresarás el contenido de la documentación sobre Polinomio de Lagrange -->
             <p>
                 El polinomio de interpolación de Lagrange es simplemente una reformulación del
@@ -90,8 +90,7 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          <h6 class="text-center">Encontrando los $L_i(x)$</h6>
+            <h6 class="text-center">Encontrando los $L_i(x)$</h6>
           <div>
             \[
               L_i(x) = \prod_{\substack{j=0 \\ j \ne i}}^{n-1} \frac{x - x_j}{x_i - x_j}
@@ -122,6 +121,7 @@
             \]
           </div>
           <h5>Por lo tanto el polinomio de interpolación de Lagrange es: $-\frac{5}{2}x^2+\frac{9}{2}x+1$</h5>
+          </div>
         </div>        
       </section>
 
@@ -129,9 +129,120 @@
       <section id="diferenciacion" class="mb-5">
         <h2 class="mb-3">Diferenciación Numérica</h2>
         <div class="card">
-          <div class="card-body">
+          <div class="card-body text-justify">
             <!-- Aquí ingresarás el contenido de la documentación sobre Diferenciación Numérica -->
+            <p>
+              De acuerdo con (Chapra, R. P. y P. Canale, R. 2007. pp. 669) se pueden generar fórmulas por diferencias divididas de alta exactitud tomando términos adicionales en la expansión de la serie de Taylor. Por ejemplo, la expansión de la serie de Taylor hacia adelante se escribe como:
 
+            \[f(x_{i+1}) = f(x_i) + f'(x_i)h + \dfrac{f''(x_i)}{2} h^2 + ... \]
+
+            de la que se despéja
+
+            \[f'(x_{i}) = \dfrac{f(x_{i + 1}) - f(x_i)}{h} - \dfrac{f''(x_i)}{2} h + O(h^2)... \]
+
+            donde \[f'' = \dfrac{f(x_{i+2}) - 2f(x_{i+1}) +f(x_i)}{h^2} + O(h) \]
+
+            con lo cual se obtienen las siguientes expresiones para $f'(x_i)$
+
+            * Excluyendo los terminos de la segunda derivada en adelante
+
+            \[ f'(x_{i}) = \dfrac{f(x_{i + 1}) - f(x_i)}{h} + O(h)... \]
+
+            * Incluyendo los terminos de la segunda derivada y excluyendo los terminos de orden superior
+
+            \[ f'(x_{i}) = \dfrac{-f(x_{i+2}) + 4f(x_{i+1}) -3f(x_i)}{2h} + O(h^2)... \]
+
+            Donde los terminos $O(h)$ y $O(h^2)$ representan el error de cada una de las aproximaciones. Observe que al incluir el termino de la segunda derivada mejora la exactitud a $O(h^2)$
+
+            En la figura 23.1, 23.2 y 23.3 (Chapra, R. P. y P. Canale, R. 2007. pp. 669–670). se presentan las formulas para las derivadas por diferencias divididas hacia adelante, hacia atras y centradas. En cada caso se presenta dos versiones: aproximacion de primer orden y aproximacion de segundo orden (mas exacta)
+            </p>
+            
+            <h4>Diferencias Divididas Hacia Adelante</h4>
+            <h5>Primera derivada</h5>
+            <p>
+              \[ f'(x_i) = \frac{f(x_{i+1}) - f(x_i)}{h} \]<span>Error: $O(h)$</span>
+              \[ f'(x_i) = \frac{-f(x_{i+2}) + 4f(x_{i+1}) - 3f(x_i)}{2h} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h5>Segunda derivada</h5>
+            <p>
+              \[ f''(x_i) = \frac{f(x_{i+2}) - 2f(x_{i+1}) + f(x_i)}{h^2} \]<span>Error: $O(h)$</span>
+              \[ f''(x_i) = \frac{-f(x_{i+3}) + 4f(x_{i+2}) - 5f(x_{i+1}) + 2f(x_i)}{h^2} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h4>Diferencias Divididas Hacia Atras</h4>
+            <h5>Primera derivada</h5>
+            <p>
+              \[ f'(x_i) = \frac{f(x_i) - f(x_{i-1})}{h} \]<span>Error: $O(h)$</span>
+              \[ f'(x_i) = \frac{3f(x_i) - 4f(x_{i-1}) + f(x_{i-2})}{2h} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h5>Segunda derivada</h5>
+            <p>
+              \[ f''(x_i) = \frac{f(x_i) - 2f(x_{i-1}) + f(x_{i-2})}{h^2} \]<span>Error: $O(h)$</span>
+              \[ f''(x_i) = \frac{2f(x_i) - 5f(x_{i-1}) + 4f(x_{i-2}) - f(x_{i-3})}{h^2} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h4>Diferencias Divididas Centradas</h4>
+            <h5>Primera derivada</h5>
+            <p>
+              \[ f'(x_i) = \frac{f(x_{i+1}) - f(x_{i-1})}{2h} \]<span>Error: $O(h)$</span>
+              \[ f'(x_i) = \frac{-f(x_{i+2}) + 8f(x_{i+1}) - 8f(x_{i-1}) + f(x_{i-2})}{12h} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h5>Segunda derivada</h5>
+            <p>
+              \[ f''(x_i) = \frac{f(x_{i+1}) - 2f(x_i) + f(x_{i-1})}{h^2} \]<span>Error: $O(h)$</span>
+              \[ f''(x_i) = \frac{-f(x_{i+2}) + 16f(x_{i+1}) - 30f(x_i) + 16f(x_{i-1}) - f(x_{i-2})}{12h^2} \]<span>Error: $O(h^2)$</span>
+            </p>
+            <h4>Ejemplo ilustrativo</h4>
+            <p>
+              Sea la función \( f(x) = \sin(x) \) y deseamos estimar su primera derivada en el punto \( x = \frac{\pi}{4} \) utilizando la fórmula de <strong>diferencias centradas de segundo orden</strong>:
+            </p>
+
+            <p>
+              \[ f'(x_i) \approx \frac{f(x_{i+1}) - f(x_{i-1})}{2h} \]
+            </p>
+
+            <p>
+              Usamos un paso \( h = 0.1 \), entonces:
+            </p>
+
+            <p>
+              \[
+              f'(x_i) \approx \frac{\sin\left(\frac{\pi}{4} + 0.1\right) - \sin\left(\frac{\pi}{4} - 0.1\right)}{2 \cdot 0.1}
+              \]
+            </p>
+
+            <p>
+              Calculamos los valores numéricos:
+              \[
+              \sin\left(\frac{\pi}{4} + 0.1\right) \approx \sin(0.8854) \approx 0.7742
+              \]
+              \[
+              \sin\left(\frac{\pi}{4} - 0.1\right) \approx \sin(0.6854) \approx 0.6329
+              \]
+            </p>
+
+            <p>
+              Sustituyendo:
+              \[
+              f'(x_i) \approx \frac{0.7742 - 0.6329}{0.2} = \frac{0.1413}{0.2} = 0.7065
+              \]
+            </p>
+
+            <p>
+              El valor exacto de la derivada es:
+              \[
+              f'(x) = \cos\left(\frac{\pi}{4}\right) = \frac{\sqrt{2}}{2} \approx 0.7071
+              \]
+            </p>
+
+            <p>
+              Por lo tanto, el error absoluto es:
+              \[
+              |0.7071 - 0.7065| = 0.0006
+              \]
+            </p>
+
+            <p>
+              Esto demuestra que, con un valor pequeño de \( h \), la fórmula centrada de segundo orden da una aproximación muy precisa.
+            </p>
           </div>
         </div>
       </section>

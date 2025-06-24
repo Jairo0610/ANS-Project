@@ -86,5 +86,5 @@ def edit_profile_view(request):
     }
     return render(request, 'profiles/profile.html', context)
 
-def doc(request):
+def documentacion(request):
     return render(request, 'documentacion.html')
