@@ -33,7 +33,8 @@
                   <div class="text-center p-4 rounded-3 bg-light">
                     <i class="bi bi-calculator fs-1 text-danger mb-3"></i>
                     <h3 class="display-6 fw-bold mb-2">Solucionador</h3>
-                    <a href="{% url 'metodos:solucionador' %}" class="btn btn-dark">Calcular</a>
+                    <a href="{% url 'metodos:lagrange' %}" class="btn btn-dark">Lagrange</a>
+                    <a href="{% url 'metodos:diferenciacion' %}" class="btn btn-dark">Diferenciación</a>
                   </div>
                 </div>
                 <div class="col">
@@ -48,7 +49,7 @@
                   <div class="text-center p-4 rounded-3 bg-light">
                     <i class="bi bi-clock-history fs-1 text-danger mb-3"></i>
                     <h3 class="display-6 fw-bold mb-2">Historial</h3>
-                    <p class="fs-5 text-muted">Botón</p>
+                    <a href="{% url 'metodos:ver_historial' %}" class="btn btn-dark">Ver</a>
                   </div>
                 </div>
                 {% endif %}

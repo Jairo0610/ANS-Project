@@ -2,8 +2,13 @@
 
 {% block head_contenido %}
     {% load static %}
-    <script src="{% static 'metodos/js/solucionador.js' %}" defer></script>
+    <script src="{% static 'metodos/js/diferenciacion.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'metodos/css/style.css' %}">
+      <!-- Carga de MathJax -->
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
 {% endblock %}
 
 {% block title %}
@@ -18,16 +23,7 @@
         <div id="contenedorSeleccionarMetodo" class="mb-5">
           <h3 class="h4 mb-3" id="tituloMetodo">Selecciona el método</h3>
           <div class="row g-3">
-            <div class="col-md-6">
-              <div id="lagrangeCard" class="card metodo-card h-100 text-center" onclick="seleccionarMetodo('lagrange')">
-                <div class="card-body">
-                  <i class="bi bi-superscript display-4 text-success mb-3"></i>
-                  <h4 class="card-title">Interpolación de Lagrange</h4>
-                  <p class="card-text">Mínimo 2 puntos requeridos</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
               <div id="diferenciacionCard" class="card metodo-card h-100 text-center" onclick="seleccionarMetodo('diferenciacion')">
                 <div class="card-body">
                   <i class="bi bi-superscript display-4 text-danger mb-3"></i>
@@ -59,8 +55,22 @@
                   <i class="bi bi-check-circle me-2"></i>
                   Solucionar
                 </button>
+
+                <button type="button" id="limpiarBtn" class="btn btn-secondary ms-2">
+                  Limpiar
+                </button>
+
+
               </div>
             </form>
+
+  
+            <!-- ↓ CONTENEDOR PARA MOSTRAR LOS PASOS DE DIFERENCIACIÓN -->
+            <div id="conteneroProcesos"></div>
+            
+            <!-- aquí sigue el resto de tu template -->
+
+
           </div>
 
           <div class="mt-1" id="conteneroProcesos" style="display: block;">
