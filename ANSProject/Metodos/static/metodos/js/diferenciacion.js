@@ -19,6 +19,10 @@ const tituloOperacion = document.getElementById('tituloOperacion');
 const agregarPuntoBtn = document.getElementById('agregarPuntoBtn');
 const solucionarBtn = document.getElementById('solucionarBtn');
 
+const limpiarBtn = document.getElementById('limpiarBtn');
+limpiarBtn.addEventListener('click', limpiarTodo);
+
+
 // recibe para evitar recargar pagina
 function confirmarSalida(e) {
     e.preventDefault();
@@ -117,13 +121,13 @@ function renderizarInputs(){
                     <div class="row">
                     <div class="col-6 mb-3">
                         <label class="form-label">X</label>
-                        <input type="number" class="form-control form-control-lg"
+                        <input type="number" step="any" class="form-control form-control-lg"
                         value="${punto.x}" oninput="actualizarPuntoPorIndice(${indice}, 'x', this.value)"
                         placeholder="Valor de X" required/>
                     </div>
                     <div class="col-6 mb-3">
                         <label class="form-label">F(X)</label>
-                        <input type="number" class="form-control form-control-lg"
+                        <input type="number" step="any" class="form-control form-control-lg"
                         value="${punto.y}" oninput="actualizarPuntoPorIndice(${indice}, 'y', this.value)"
                         placeholder="Valor de F(X)" required/>
                     </div>
@@ -151,25 +155,28 @@ function renderizarInputs(){
                 <div class="row">
                     <div class="col-6 mb-3">
                         <label class="form-label">X</label>
-                        <input type="number" class="form-control form-control-lg"
-                        value=""
-                        oninput = "actualizarBotonSolucionar(); guardarDatosDiferenciacion('x',this.value);"
-                        placeholder="Valor de X" required/>
+                        <input type="number" step="any" inputmode="decimal"
+                            class="form-control form-control-lg"
+                            value=""
+                            oninput="actualizarBotonSolucionar(); guardarDatosDiferenciacion('x',this.value);"
+                            placeholder="Valor de X" required
+                        />
                     </div>
                     <div class="col-6 mb-3">
                         <label class="form-label">h</label>
-                        <input type="number"
-                        class="form-control form-control-lg"
-                        value=""
-                        oninput = "actualizarBotonSolucionar(); guardarDatosDiferenciacion('h',this.value);"
-                        placeholder="Valor de h" required/>
+                        <input type="number" step="any" inputmode="decimal"
+                            class="form-control form-control-lg"
+                            value=""
+                            oninput="actualizarBotonSolucionar(); guardarDatosDiferenciacion('h',this.value);"
+                            placeholder="Valor de h" required
+                        />
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label">Función</label>
                         <input type="input" class="form-control form-control-lg"
                         value=""
                         oninput = "actualizarBotonSolucionar(); guardarDatosDiferenciacion('funcion',this.value);"
-                        placeholder="Ax² + Bx - C " required/>
+                        placeholder="a*x^2 + b*x - c " required/>
                     </div>
                 </div>
             </div>
@@ -191,12 +198,17 @@ function agregarPunto() {
 agregarPuntoBtn.addEventListener('click', agregarPunto);
 
 // guarda los datos para diferenciacio numerica (al escribir en el formulario)
-function guardarDatosDiferenciacion(clave,valor){
-    datosDiferenciacion[clave] = valor === '' ? '' : Number(valor);
-
+function guardarDatosDiferenciacion(clave, valor) {
+    if (clave === 'funcion') {
+        // para la función guardamos la cadena tal cual
+        datosDiferenciacion[clave] = valor;
+    } else {
+        // para x y h, convertimos a número solo si no está vacío
+        datosDiferenciacion[clave] = valor === '' ? '' : Number(valor);
+    }
     actualizarBotonSolucionar();
-
 }
+
 
 
 // funcion para actualizar cambios de los inputs hechos por el usuario (lagrange)
@@ -237,26 +249,193 @@ function actualizarBotonSolucionar() {
     console.log(`Estado actual del boton solucionar ${solucionarBtn.disabled}`)
 }
 
-// evita que se recargue pagina al enviar formulario (ambos metodos)
-document.getElementById('formularioSolucion').addEventListener('submit', function(e) {
+
+function limpiarTodo() {
+    // 1) limpiamos resultados
+    const cont = document.getElementById('conteneroProcesos');
+    cont.innerHTML = '';
+
+    // 2) reiniciamos datos para diferenciación
+    if (metodoActual === 'diferenciacion') {
+        datosDiferenciacion.x = '';
+        datosDiferenciacion.h = '';
+        datosDiferenciacion.funcion = '';
+    }
+    // 3) reiniciamos datos para lagrange (si estuviera seleccionado)
+    else if (metodoActual === 'lagrange') {
+        puntos = puntos.map(_ => ({ x: '', y: '' }));
+    }
+
+    // 4) volvemos a renderizar los inputs vacíos
+    renderizarInputs();
+
+    // 5) deshabilitamos el botón “Solucionar” hasta que vuelvan a llenarlos
+    actualizarBotonSolucionar();
+}
+
+
+
+
+function resolverDiferenciacion() {
+    // Helper para redondear a 6 decimales
+    const round6 = n => Number(n.toFixed(6));
+
+    const { x, h, funcion } = datosDiferenciacion;
+    if (x === '' || h === '' || !funcion.trim()) return;
+
+    // Helper: convierte "A/B" en "\frac{A}{B}" solo si hay '/'
+    function toFracLatex(str) {
+        if (!str.includes('/')) return str.replace(/\*/g, ' ');
+        const s = str.trim().replace(/^\(+|\)+$/g, '');
+        const i = s.lastIndexOf('/');
+        const num = s.slice(0, i), den = s.slice(i + 1);
+        return `\\frac{${num.replace(/\*/g,' ')}}{${den}}`;
+    }
+
+    // LaTeX de la función original y de las sustituciones
+    const latexFuncion = toFracLatex(funcion);
+    const exprX       = funcion.replace(/x/g, `(${x})`);
+    const exprXh      = funcion.replace(/x/g, `(${x}+${h})`);
+    const exprXmh     = funcion.replace(/x/g, `(${x}-${h})`);
+    const latexX      = toFracLatex(exprX);
+    const latexXh     = toFracLatex(exprXh);
+    const latexXmh    = toFracLatex(exprXmh);
+
+    // Preparamos y evaluamos la función
+    const exprJS = funcion.replace(/\^/g, '**');
+    const f      = new Function('x', `return ${exprJS};`);
+    const fx     = round6(f(x));
+    const fxh    = round6(f(x + h));
+    const fxmh   = round6(f(x - h));
+
+    // Calculamos numeradores y diferencias
+    const numAdel  = round6(fxh - fx);
+    const numAtras = round6(fx - fxmh);
+    const numCent  = round6(fxh - fxmh);
+    const adelante = round6(numAdel  / h);
+    const atras    = round6(numAtras / h);
+    const central  = round6(numCent  / (2 * h));
+
+    // Fórmulas generales por método
+    const formulas = {
+        'Diferencia hacia adelante': '\\frac{f(x+h)-f(x)}{h}',
+        'Diferencia hacia atrás':    '\\frac{f(x)-f(x-h)}{h}',
+        'Diferencia central':        '\\frac{f(x+h)-f(x-h)}{2h}'
+    };
+
+    // Vaciamos resultados anteriores
+    const cont = document.getElementById('conteneroProcesos');
+    cont.innerHTML = '';
+
+    // Definimos los tres métodos y sus pasos
+    const metodos = [
+        {
+        titulo: 'Diferencia hacia adelante',
+        pasos: [
+            `\\(f(x+h) = ${latexXh} = ${fxh}\\)`,
+            `\\(f(x)   = ${latexX}  = ${fx}\\)`,
+            `\\(f(x+h)-f(x) = ${numAdel}\\)`,
+            `\\(\\frac{${numAdel}}{${h}} = ${adelante}\\)`
+        ]
+        },
+        {
+        titulo: 'Diferencia hacia atrás',
+        pasos: [
+            `\\(f(x)   = ${latexX}   = ${fx}\\)`,
+            `\\(f(x-h) = ${latexXmh} = ${fxmh}\\)`,
+            `\\(f(x)-f(x-h) = ${numAtras}\\)`,
+            `\\(\\frac{${numAtras}}{${h}} = ${atras}\\)`
+        ]
+        },
+        {
+        titulo: 'Diferencia central',
+        pasos: [
+            `\\(f(x+h) = ${latexXh} = ${fxh}\\)`,
+            `\\(f(x-h) = ${latexXmh} = ${fxmh}\\)`,
+            `\\(f(x+h)-f(x-h) = ${numCent}\\)`,
+            `\\(\\frac{${numCent}}{2\\times${h}} = ${central}\\)`
+        ]
+        }
+    ];
+
+    // Renderizamos cada método
+    metodos.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'alert alert-light border-primary p-4 mb-5';
+
+        // Título del método
+        const titulo = document.createElement('h5');
+        titulo.className = 'text-center mb-4';
+        titulo.textContent = m.titulo;
+        card.appendChild(titulo);
+
+        // --- Sección DATOS ---
+        const datosHeader = document.createElement('h6');
+        datosHeader.className = 'fw-bold mb-3';
+        datosHeader.textContent = 'DATOS';
+        card.appendChild(datosHeader);
+
+        const datosList = document.createElement('ul');
+        datosList.className = 'list-unstyled mb-5';
+
+        // Función original
+        const liFunc = document.createElement('li');
+        liFunc.className = 'fs-5 mb-3 text-center';
+        liFunc.innerHTML = `\\(f(x) = ${latexFuncion}\\)`;
+        datosList.appendChild(liFunc);
+
+        // Fórmula de cálculo
+        const liFormula = document.createElement('li');
+        liFormula.className = 'fs-5 mb-3 text-center';
+        liFormula.innerHTML = `\\(\\text{Fórmula: }${formulas[m.titulo]}\\)`;
+        datosList.appendChild(liFormula);
+
+        // x y h en LaTeX
+        const liX = document.createElement('li');
+        liX.className = 'fs-5 mb-2 text-center';
+        liX.innerHTML = `\\(x = ${x}\\)`;
+        datosList.appendChild(liX);
+
+        const liH = document.createElement('li');
+        liH.className = 'fs-5 text-center';
+        liH.innerHTML = `\\(h = ${h}\\)`;
+        datosList.appendChild(liH);
+
+        card.appendChild(datosList);
+
+        // --- Sección SOLUCIÓN ---
+        const solHeader = document.createElement('h6');
+        solHeader.className = 'fw-bold mb-3';
+        solHeader.textContent = 'SOLUCIÓN';
+        card.appendChild(solHeader);
+
+        const solList = document.createElement('ul');
+        solList.className = 'list-unstyled';
+
+        m.pasos.forEach(tex => {
+        const li = document.createElement('li');
+        li.className = 'fs-5 mb-3 text-center';
+        li.innerHTML = tex;
+        solList.appendChild(li);
+        });
+
+        card.appendChild(solList);
+        cont.appendChild(card);
+    });
+
+    // Forzamos render de MathJax
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise();
+    }
+}
+
+document
+  .getElementById('formularioSolucion')
+  .addEventListener('submit', function(e) {
     e.preventDefault();
-
-    console.log("Simulando envío de datos...");
-//   const formData = new FormData(this);
-
-//   fetch('/ruta-del-servidor', {
-//     method: 'POST',
-//     body: formData
-//   })
-//   .then(respuesta => respuesta.text())
-//   .then(data => {
-//     console.log('Respuesta del servidor:', data);
-//   })
-//   .catch(error => {
-//     console.error('Error:', error);
-//   });
-
-    console.log(datosDiferenciacion)
-
-
-});
+    if (metodoActual === 'diferenciacion') {
+      resolverDiferenciacion();
+    } else {
+      resolverLagrange();
+    }
+  });

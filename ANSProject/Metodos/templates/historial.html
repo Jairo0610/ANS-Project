@@ -1,0 +1,50 @@
+{% extends "base/main.html" %}
+
+{% block head_contenido %}
+    {% load static %}
+    <script src="{% static 'metodos/js/lagrange.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'metodos/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'metodos/css/style.css' %}">
+      <!-- Carga de MathJax -->
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+{% endblock %}
+
+{% block title %}
+    Solucionador
+{% endblock %}
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Historial de Ejercicios</h2>
+
+    {% if historial %}
+      <div class="accordion" id="historialAccordion">
+        {% for item in historial %}
+          <div class="accordion-item mb-3">
+            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                {{ item.tipo }} - {{ item.fecha_creacion|date:"d/m/Y H:i" }}
+              </button>
+            </h2>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#historialAccordion">
+              <div class="accordion-body">
+                <p><strong>Puntos:</strong></p>
+                <ul>
+                  {% for p in item.datos_dict.puntos %}
+                    <li>\[ ({{ p.x }}, {{ p.y }}) \]</li>
+                  {% endfor %}
+                </ul>
+
+                <p><strong>Polinomio:</strong></p>
+                <p>\[P(x) = {{ item.datos_dict.polinomio }}\]</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">No se ha registrado ningún ejercicio todavía.</div>
+    {% endif %}
+  </div>
+{%endblock%}
