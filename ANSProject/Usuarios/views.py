@@ -89,3 +89,6 @@ def edit_profile_view(request):
 
 def documentacion(request):
     return render(request, 'documentacion.html')
+
+def creditos(request):
+    return render(request, 'creditos.html')
