@@ -1,6 +1,92 @@
-{% extends "baseMetodos/main.html" %}
+{% extends "base/main.html" %}
+
+{% block head_contenido %}
+    {% load static %}
+    <script src="{% static 'metodos/js/solucionador.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'metodos/css/style.css' %}">
+{% endblock %}
 
 {% block title %}
     Solucionador
 {% endblock %}
+{% block content %}
+  <div class="container my-4">
+    <div class="card shadow">
 
+      <div class="card-body">
+        <!-- seleccion de metodo -->
+        <div id="contenedorSeleccionarMetodo" class="mb-5">
+          <h3 class="h4 mb-3" id="tituloMetodo">Selecciona el método</h3>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="lagrangeCard" class="card metodo-card h-100 text-center" onclick="seleccionarMetodo('lagrange')">
+                <div class="card-body">
+                  <i class="bi bi-superscript display-4 text-success mb-3"></i>
+                  <h4 class="card-title">Interpolación de Lagrange</h4>
+                  <p class="card-text">Mínimo 2 puntos requeridos</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="diferenciacionCard" class="card metodo-card h-100 text-center" onclick="seleccionarMetodo('diferenciacion')">
+                <div class="card-body">
+                  <i class="bi bi-superscript display-4 text-danger mb-3"></i>
+                  <h4 class="card-title">Diferenciación Numérica</h4>
+                  <p class="card-text">Mínimo 3 puntos requeridos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- manejo de proceso (escondido al inicio) -->
+        <div id="manejoProcesos" style="display: none;">
+          <div class="">
+            <h3 id="tituloOperacion" class="h4 mb-3"></h3>
+
+            <button id="agregarPuntoBtn" class="btn btn-primary my-3">
+              <i class="bi bi-plus-circle me-2"></i>
+              Agregar Punto
+            </button>
+
+            <form action="" id="formularioSolucion">
+              <div class="d-flex flex-column">
+
+                <div id="contenedorInputs" class="row g-3">
+                  <!-- los inputs agregados se mostraran aquí -->
+                </div>
+                <button type="submit" id="solucionarBtn" class="btn btn-success form-control my-3 d-block mx-auto" disabled>
+                  <i class="bi bi-check-circle me-2"></i>
+                  Solucionar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="mt-1" id="conteneroProcesos" style="display: block;">
+            <!-- Los pasos se generarán aquí LO COMENTO PARA QUE USEN ESTA ESTRUCTURA SI HACEN innerHTML -->
+
+             <!-- <h3 class="h4 mb-3 alert alert-info w-auto">
+              <i class="bi bi-list-check me-2"></i>
+              Paso 1
+            </h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Autem cumque tenetur hic fugiat veniam non consequuntur fugit quo quas quasi.
+              Aliquid mollitia incidunt cum labore ipsa facilis molestiae repellat soluta.</p>
+
+            <h3 class="h4 mb-3 alert alert-info w-auto">
+              <i class="bi bi-list-check me-2"></i>
+              Paso 2
+            </h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Autem cumque tenetur hic fugiat veniam non consequuntur fugit quo quas quasi.
+              Aliquid mollitia incidunt cum labore ipsa facilis molestiae repellat soluta.</p> -->
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+{% endblock %}
