@@ -47,13 +47,28 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="id_username" class="form-label">Nombre de usuario</label>
-                        <input type="text" class="form-control" name="username">
+                        <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" name="username" id="id_username" value="{{ form.username.value|default_if_none:'' }}">
+                        {% for error in form.username.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
+
                     <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" name="password">
+                        <label for="id_password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" name="password" id="id_password">
+                        {% for error in form.password.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
                     </div>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger text-center">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
                     <button type="submit" class="btn btn-primary w-100">Inicias Sesion</button>
                 </form>
