@@ -1,0 +1,22 @@
+body {
+  background-color: #f8f9fa;
+  padding-top: 2rem;
+}
+.input-card {
+  transition: all 0.3s ease;
+}
+.input-card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.metodo-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.metodo-card:hover {
+  transform: translateY(-5px);
+}
+.metodo-card.selected {
+  border: 2px solid #0d6efd;
+  background-color: #f0f7ff;
+}
