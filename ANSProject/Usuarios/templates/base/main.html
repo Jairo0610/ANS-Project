@@ -14,13 +14,28 @@
     {% endblock %}
     <style>
         .bg-home {
-          background-image: url('https://placecats.com/neo/300/200');
-          background-repeat: no-repeat;
-          background-position: right;
-          background-size: contain;
-          opacity: 0.5;
-          pointer-events: none;
+            background-image: url("{%  static 'image/homero.png' %}");
+            background-repeat: no-repeat;
+            background-position: right;
+            background-size: contain;
+            opacity: 0.5;
+            pointer-events: none;
         }
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1; /* Empuja el footer hacia abajo */
+        }
+
     </style>
     <title> {% block title %}{% endblock %}</title>
 </head>
@@ -39,7 +54,7 @@
                             <a class="nav-link active fs-3" aria-current="page" href="{% url 'inicio' %}">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fs-3" href="">Créditos</a>
+                            <a class="nav-link fs-3" href="{% url 'creditos' %}">Créditos</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -64,7 +79,7 @@
         </nav>
 
     </header>
-    <main>
+    <main class="wrapper">
         {% block content %}
 
         {% endblock %}

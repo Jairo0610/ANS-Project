@@ -1,12 +1,12 @@
 {% extends "base/main.html" %}
 {% load static %}
-{% block title %} Inicio {% endblock %}
+{% block title %} Perfil {% endblock %}
 
 {% block content %}
     <!-- seccion principal -->
 <!-- templates/editar_perfil.html -->
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Editar Perfil</h2>
+    <h2 class="text-center mb-4">Perfil</h2>
 
     {% if messages %}
       {% for message in messages %}
@@ -30,7 +30,7 @@
 </ul>
 
 <!-- Contenido de las pestañas -->
-<div class="tab-content mt-4" id="perfilTabsContent">
+<div class="tab-content mt-4 mb-4" id="perfilTabsContent">
   <!-- Pestaña: Ver Perfil -->
   <div class="tab-pane fade show active" id="ver" role="tabpanel" aria-labelledby="ver-tab">
     <div class="card p-3">
